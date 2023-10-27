@@ -1,3 +1,4 @@
+
 import openpyxl as xl
 import pandas as pd
 import numpy as np
@@ -7,8 +8,8 @@ from datetime import datetime
 _3A_path = r'C:/Pratham/python/ExcelAutomation/_3A_.xlsx'
 _3B_path = r'C:/Pratham/python/ExcelAutomation/_3B_.xlsx'
 _3C_path = r'C:/Pratham/python/ExcelAutomation/_3C_.xlsx'
-# _4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_.xlsx'
-# _4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_.xlsx'
+_4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_.xlsx'
+_4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_.xlsx'
 #Taking dates from user
 start_week_date = input('Enter week start date in DD-MM-YYY format : ')
 end_week_date = input('Enter week end date in DD-MM-YYYY format : ')
@@ -30,9 +31,13 @@ def convert_date(date_obj):
             return None
     return date_a.strftime('%d-%m-%Y')
 
+def splitter(count_obj) :
+    count = len(count_obj.split("||"))
+    return count
 
 
-DMS = r'C:/Pratham/python/ExcelAutomation/191023_Kharif 23-24 Demo Plot & DMS user report & Program dashboard.xlsx'
+
+DMS = r'C:/Pratham/python/ExcelAutomation/HUF_report.xlsx'
 workbook = xl.load_workbook(DMS)
 sheet = workbook['2.DMS-UserSummary']
 sheet2 = workbook['3.Program Dashboard']
@@ -40,7 +45,7 @@ sheet3 = workbook['1.DemoPlot-Summary']
 
 
 
-list1 = [_3A_path,_3B_path,_3C_path]
+list1 = [_3A_path,_3B_path,_3C_path,_4A_path,_4B_path]
 list2 = ['CIPT','Srijan','Viksat','Pani','Pradan','SSP']
 list_season_3A_partner = []
 list_week_3A_partner = []
@@ -538,63 +543,433 @@ for i in list1:
         cell_139.value = _3C_unique_CT[5]
         print("3C run successfully")
 
-    # elif i == _4A_path:
-    #     _4A_season =[]
-    #     _4A_unique_season = []
+    elif i == _4A_path:
+        _4A_season =[]
+        _4A_unique_season = []
+        list_week_4A_partner = []
+        list_4A_sum = []
 
 
 
-    #     for x in list2:
-    #         count_PARTNER_season = season_df[season_df['partner']== x].shape[0]
-    #         _4A_season.append(count_PARTNER_season)
+        for x in list2:
+            count_PARTNER_season_4A = season_df[season_df['partner']== x].shape[0]
+            _4A_season.append(count_PARTNER_season_4A)
         
-    #     for x in list2:
-    #         PARTNER_season = season_df[season_df['partner']== x]
-    #         _unique_season_value_PARTNER = PARTNER_season['Select unique Serial No. for Demo Plot'].nunique()
-    #         _4A_unique_season.append(_unique_season_value_PARTNER)
+        for x in list2:
+            PARTNER_season_4A_unique = season_df[season_df['partner']== x]
+            _unique_season_value_PARTNER = PARTNER_season_4A_unique['Select unique Serial No. for Demo Plot'].nunique()
+            _4A_unique_season.append(_unique_season_value_PARTNER)
+
+        for x in list2:
+            PARTNER_season_4A_sum = season_df[season_df['partner']== x]
+            value_4A = 0
+            
+
+            for i in range(35,48,2):
+                
+                df_sum_4A=PARTNER_season_4A_sum.iloc[:,i].to_frame()
+                if i == 35:
+                    count_1 = df_sum_4A.dropna(subset=['If yes select the planned activities'])
+                    count_1 = count_1['If yes select the planned activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_1
+                elif i == 37:
+                    count_2 = df_sum_4A.dropna(subset=['If yes select the planned activities.1'])
+                    count_2 = count_2['If yes select the planned activities.1'].apply(splitter).sum()
+                    value_4A = value_4A + count_2
+            
+                elif i == 39:
+                    count_3 = df_sum_4A.dropna(subset=['If yes select the planned activities.2'])
+                    count_3 = count_3['If yes select the planned activities.2'].apply(splitter).sum()
+                    value_4A = value_4A + count_3
+                
+                elif i == 41:
+                    count_4 = df_sum_4A.dropna(subset=['If yes select the planned activities.3'])
+                    count_4 = count_4['If yes select the planned activities.3'].apply(splitter).sum()
+                    value_4A = value_4A + count_4
+                    
+                    
+                elif i == 43:
+                    count_5 = df_sum_4A.dropna(subset=['If yes select the planned activities.4'])
+                    count_5 = count_5['If yes select the planned activities.4'].apply(splitter).sum()
+                    value_4A = value_4A + count_5
+            
+                elif i == 45:
+                    count_6 = df_sum_4A.dropna(subset=['If yes select the planned activities.5'])
+                    count_6 = count_6['If yes select the planned activities.5'].apply(splitter).sum()
+                    value_4A = value_4A + count_6
+                    
+                elif i == 47:
+                    count_7 = df_sum_4A.dropna(subset=['If yes select the planned activities.6'])
+                    count_7 = count_7['If yes select the planned activities.6'].apply(splitter).sum()
+                    value_4A = value_4A + count_7
+            list_4A_sum.append(value_4A)
         
 
-unique_value_week = []
-unique_value_season = []    
+    
+        for x in list2:
+            count_df_4A_week = week_df[week_df['partner']== x]
+            df_3cW = count_df_4A_week[['Surveyor Id']]
+            list_week_4A_partner.append(df_3cW)
+
+        
+
+        cell_140 = sheet3['C7']             
+        cell_140.value = _4A_unique_season[0]
+        cell_141 = sheet3['D7']
+        cell_141.value = _4A_unique_season[1]
+        cell_142 = sheet3['E7']
+        cell_142.value = _4A_unique_season[2]
+        cell_143 = sheet3['F7']
+        cell_143.value = _4A_unique_season[3]
+        cell_145 = sheet3['G7']
+        cell_145.value = _4A_unique_season[4]
+        cell_146 = sheet3['H7']
+        cell_146.value = _4A_unique_season[5]
+
+        cell_147 = sheet3['C10']             
+        cell_147.value = _4A_season[0]
+        cell_148 = sheet3['D10']
+        cell_148.value = _4A_season[1]
+        cell_149 = sheet3['E10']
+        cell_149.value = _4A_season[2]
+        cell_150 = sheet3['F10']
+        cell_150.value = _4A_season[3]
+        cell_151 = sheet3['G10']
+        cell_151.value = _4A_season[4]
+        cell_152 = sheet3['H10']
+        cell_152.value = _4A_season[5]
+
+        cell_153 = sheet3['C12']             
+        cell_153.value = list_4A_sum[0]
+        cell_154 = sheet3['D12']
+        cell_154.value = list_4A_sum[1]
+        cell_155 = sheet3['E12']
+        cell_155.value = list_4A_sum[2]
+        cell_156 = sheet3['F12']
+        cell_156.value = list_4A_sum[3]
+        cell_157 = sheet3['G12']
+        cell_157.value = list_4A_sum[4]
+        cell_158 = sheet3['H12']
+        cell_158.value = list_4A_sum[5]
+
+        print("4A run successfully")
+        
+
+    elif i== _4B_path:
+        _4B_week =[]
+        _4B_unique_week = []
+        _4B_season =[]
+        _4B_unique_season = []
+        _4B_farmerSUM_week = []
+        _4B_farmerSUM_season = []
+        list_4B_sum_week =[]
+        list_4B_sum_season =[]
+        list_week_4B_partner=[]
+
+
+
+        for x in list2:
+            count_PARTNER_season_4B = season_df[season_df['partner']== x].shape[0]
+            _4B_season.append(count_PARTNER_season_4B)
+        
+        for x in list2:
+            PARTNER_season_4B_unique = season_df[season_df['partner']== x]
+            _unique_season_value_PARTNER = PARTNER_season_4B_unique['Select Demo Plot for tracking'].nunique()
+            _4B_unique_season.append(_unique_season_value_PARTNER)
+
+        for x in list2:
+            count_PARTNER_week_4B = week_df[week_df['partner']== x].shape[0]
+            _4B_week.append(count_PARTNER_week_4B)
+        
+        for x in list2:
+            PARTNER_week_4B_unique = week_df[week_df['partner']== x]
+            _unique_week_value_PARTNER = PARTNER_week_4B_unique['Select Demo Plot for tracking'].nunique()
+            _4B_unique_week.append(_unique_week_value_PARTNER)
+
+        for x in list2:
+            sum_farmer_week = week_df[week_df['partner']== x]
+            sum_farmer_week_value = sum_farmer_week['Number of farmers who attended the Demo'].sum()
+            _4B_farmerSUM_week.append(sum_farmer_week_value)
+
+        for x in list2:
+            sum_farmer_season = season_df[season_df['partner']== x]
+            sum_farmer_season_value = sum_farmer_season['Number of farmers who attended the Demo'].sum()
+            _4B_farmerSUM_season.append(sum_farmer_season_value)
+
+        
+        for x in list2:
+            PARTNER_week_4B_sum = week_df[week_df['partner']== x]
+            value_4A = 0
+            
+
+            for i in range(45,52):
+                
+                df_sum_4B=PARTNER_week_4B_sum.iloc[:,i].to_frame()
+                if i == 45:
+                    count_1 = df_sum_4B.dropna(subset=['Land Preparation: Select demonstration activities'])
+                    count_1 = count_1['Land Preparation: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_1
+                elif i == 46:
+                    count_2 = df_sum_4B.dropna(subset=['Seed Treatment and Sowing: Select demonstration activities'])
+                    count_2 = count_2['Seed Treatment and Sowing: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_2
+            
+                elif i == 47:
+                    count_3 = df_sum_4B.dropna(subset=['Soil Health and Nutrition: Select demonstration activities'])
+                    count_3 = count_3['Soil Health and Nutrition: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_3
+                
+                elif i == 48:
+                    count_4 = df_sum_4B.dropna(subset=['Plant Growth: Select demonstration activities'])
+                    count_4 = count_4['Plant Growth: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_4
+                    
+                    
+                elif i == 49:
+                    count_5 = df_sum_4B.dropna(subset=['Pest and Weed Management: Select demonstration activities'])
+                    count_5 = count_5['Pest and Weed Management: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_5
+            
+                elif i == 50:
+                    count_6 = df_sum_4B.dropna(subset=['Irrigation: Select demonstration activities'])
+                    count_6 = count_6['Irrigation: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_6
+                    
+                elif i == 51:
+                    count_7 = df_sum_4B.dropna(subset=['Post Harvesting: Select demonstration activities'])
+                    count_7 = count_7['Post Harvesting: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_7
+            list_4B_sum_week.append(value_4A)
+
+
+
+        for x in list2:
+            PARTNER_week_4B_sum = season_df[season_df['partner']== x]
+            value_4A = 0
+            
+
+            for i in range(45,52):
+                
+                df_sum_4B=PARTNER_week_4B_sum.iloc[:,i].to_frame()
+                if i == 45:
+                    count_8 = df_sum_4B.dropna(subset=['Land Preparation: Select demonstration activities'])
+                    count_8 = count_8['Land Preparation: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_8
+                elif i == 46:
+                    count_9 = df_sum_4B.dropna(subset=['Seed Treatment and Sowing: Select demonstration activities'])
+                    count_9 = count_9['Seed Treatment and Sowing: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_9
+            
+                elif i == 47:
+                    count_10 = df_sum_4B.dropna(subset=['Soil Health and Nutrition: Select demonstration activities'])
+                    count_10 = count_10['Soil Health and Nutrition: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_10
+                
+                elif i == 48:
+                    count_11 = df_sum_4B.dropna(subset=['Plant Growth: Select demonstration activities'])
+                    count_11 = count_11['Plant Growth: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_11
+                    
+                    
+                elif i == 49:
+                    count_12 = df_sum_4B.dropna(subset=['Pest and Weed Management: Select demonstration activities'])
+                    count_12 = count_12['Pest and Weed Management: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_12
+            
+                elif i == 50:
+                    count_13 = df_sum_4B.dropna(subset=['Irrigation: Select demonstration activities'])
+                    count_13 = count_13['Irrigation: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_13
+                    
+                elif i == 51:
+                    count_14 = df_sum_4B.dropna(subset=['Post Harvesting: Select demonstration activities'])
+                    count_14 = count_14['Post Harvesting: Select demonstration activities'].apply(splitter).sum()
+                    value_4A = value_4A + count_13
+            list_4B_sum_season.append(value_4A)
+
+
+        
+        for x in list2:
+            count_df_4B_week = week_df[week_df['partner']== x]  
+            df_3cW = count_df_4B_week[['Surveyor Id']]
+            list_week_4B_partner.append(df_3cW)
+
+        
+        cell_159 = sheet3['C14']             
+        cell_159.value = _4B_unique_week[0]
+        cell_160 = sheet3['D14']
+        cell_160.value = _4B_unique_week[1]
+        cell_161 = sheet3['E14']
+        cell_161.value = _4B_unique_week[2]
+        cell_162 = sheet3['F14']
+        cell_162.value = _4B_unique_week[3]
+        cell_163 = sheet3['G14']
+        cell_163.value = _4B_unique_week[4]
+        cell_164 = sheet3['H14']
+        cell_164.value = _4B_unique_week[5]
+
+        cell_165 = sheet3['C15']             
+        cell_165.value = _4B_week[0]
+        cell_166 = sheet3['D15']
+        cell_166.value = _4B_week[1]
+        cell_167 = sheet3['E15']
+        cell_167.value = _4B_week[2]
+        cell_168 = sheet3['F15']
+        cell_168.value = _4B_week[3]
+        cell_169 = sheet3['G15']
+        cell_169.value = _4B_week[4]
+        cell_170 = sheet3['H15']
+        cell_170.value = _4B_week[5]
+
+        cell_171 = sheet3['C16']             
+        cell_171.value = list_4B_sum_week[0]
+        cell_172 = sheet3['D16']
+        cell_172.value = list_4B_sum_week[1]
+        cell_173 = sheet3['E16']
+        cell_173.value = list_4B_sum_week[2]
+        cell_174 = sheet3['F16']
+        cell_174.value = list_4B_sum_week[3]
+        cell_175 = sheet3['G16']
+        cell_175.value = list_4B_sum_week[4]
+        cell_176 = sheet3['H16']
+        cell_176.value = list_4B_sum_week[5]
+
+        cell_177 = sheet3['C17']             
+        cell_177.value = _4B_farmerSUM_week[0]
+        cell_178 = sheet3['D17']
+        cell_178.value = _4B_farmerSUM_week[1]
+        cell_179 = sheet3['E17']
+        cell_179.value = _4B_farmerSUM_week[2]
+        cell_180 = sheet3['F17']
+        cell_180.value = _4B_farmerSUM_week[3]
+        cell_181 = sheet3['G17']
+        cell_181.value = _4B_farmerSUM_week[4]
+        cell_182 = sheet3['H17']
+        cell_182.value = _4B_farmerSUM_week[5]
+
+        cell_183 = sheet3['C18']             
+        cell_183.value = _4B_unique_season[0]
+        cell_184 = sheet3['D18']
+        cell_184.value = _4B_unique_season[1]
+        cell_185 = sheet3['E18']
+        cell_185.value = _4B_unique_season[2]
+        cell_186 = sheet3['F18']
+        cell_186.value = _4B_unique_season[3]
+        cell_187 = sheet3['G18']
+        cell_187.value = _4B_unique_season[4]
+        cell_188 = sheet3['H18']
+        cell_188.value = _4B_unique_season[5]
+
+        cell_189 = sheet3['C19']             
+        cell_189.value = _4B_season[0]
+        cell_190 = sheet3['D19']
+        cell_190.value = _4B_season[1]
+        cell_191 = sheet3['E19']
+        cell_191.value = _4B_season[2]
+        cell_192 = sheet3['F19']
+        cell_192.value = _4B_season[3]
+        cell_193 = sheet3['G19']
+        cell_193.value = _4B_season[4]
+        cell_194 = sheet3['H19']
+        cell_194.value = _4B_season[5]
+
+        cell_195 = sheet3['C20']             
+        cell_195.value = list_4B_sum_season[0]
+        cell_196 = sheet3['D20']
+        cell_196.value = list_4B_sum_season[1]
+        cell_197 = sheet3['E20']
+        cell_197.value = list_4B_sum_season[2]
+        cell_198 = sheet3['F20']
+        cell_198.value = list_4B_sum_season[3]
+        cell_199 = sheet3['G20']
+        cell_199.value = list_4B_sum_season[4]
+        cell_200 = sheet3['H20']
+        cell_200.value = list_4B_sum_season[5]
+
+        cell_201 = sheet3['C22']             
+        cell_201.value = _4B_farmerSUM_season[0]
+        cell_202 = sheet3['D22']
+        cell_202.value = _4B_farmerSUM_season[1]
+        cell_203 = sheet3['E22']
+        cell_203.value = _4B_farmerSUM_season[2]
+        cell_204 = sheet3['F22']
+        cell_204.value = _4B_farmerSUM_season[3]
+        cell_205 = sheet3['G22']
+        cell_205.value = _4B_farmerSUM_season[4]
+        cell_206 = sheet3['H22']
+        cell_206.value = _4B_farmerSUM_season[5]
+
+        print("4B run successfully")
+
+unique_value_week_3A3B3C = []
+unique_value_season_3A3B3C = []
+unique_value_week_4A4B = [] 
 for i in range(0,6):
-    df_week_C = pd.concat([list_week_3A_partner[i],list_week_3B_partner[i],list_week_3C_partner[i]])
-    a = df_week_C['Surveyor Id'].nunique()
-    unique_value_week.append(a)
+    df_week_C3A3B3C = pd.concat([list_week_3A_partner[i],list_week_3B_partner[i],list_week_3C_partner[i]])
+    a = df_week_C3A3B3C['Surveyor Id'].nunique()
+    unique_value_week_3A3B3C.append(a)
 
 for i in range(0,6):
     df_season_C = pd.concat([list_season_3A_partner[i],list_season_3B_partner[i],list_season_3C_partner[i]])
     a = df_season_C['Surveyor Id'].nunique()
-    unique_value_season.append(a)
+    unique_value_season_3A3B3C.append(a)
+
+  
+for i in range(0,6):
+    df_week_C4A4B = pd.concat([list_week_4A_partner[i],list_week_4B_partner[i]])
+    a = df_week_C4A4B['Surveyor Id'].nunique()
+    unique_value_week_4A4B.append(a)
 
 
 
 # print(unique_value_week)
 # print(unique_value_season)
 cell_80 = sheet['C4']
-cell_80.value = unique_value_week[0]
+cell_80.value = unique_value_week_3A3B3C[0]
 cell_81 = sheet['D4']
-cell_81.value = unique_value_week[1]
+cell_81.value = unique_value_week_3A3B3C[1]
 cell_82 = sheet['E4']
-cell_82.value = unique_value_week[2]
+cell_82.value = unique_value_week_3A3B3C[2]
 cell_83 = sheet['F4']
-cell_83.value = unique_value_week[3]
+cell_83.value = unique_value_week_3A3B3C[3]
 cell_84 = sheet['G4']
-cell_84.value = unique_value_week[4]
+cell_84.value = unique_value_week_3A3B3C[4]
 cell_85 = sheet['H4']
-cell_85.value = unique_value_week[5]
+cell_85.value = unique_value_week_3A3B3C[5]
 
 cell_86 = sheet['C6']
-cell_86.value = unique_value_season[0]
+cell_86.value = unique_value_season_3A3B3C[0]
 cell_87 = sheet['D6']
-cell_87.value = unique_value_season[1]
+cell_87.value = unique_value_season_3A3B3C[1]
 cell_88 = sheet['E6']
-cell_88.value = unique_value_season[2]
+cell_88.value = unique_value_season_3A3B3C[2]
 cell_89 = sheet['F6']
-cell_89.value = unique_value_season[3]
+cell_89.value = unique_value_season_3A3B3C[3]
 cell_90 = sheet['G6']
-cell_90.value = unique_value_season[4]
+cell_90.value = unique_value_season_3A3B3C[4]
 cell_91 = sheet['H6']
-cell_91.value = unique_value_season[5]
+cell_91.value = unique_value_season_3A3B3C[5]
+
+cell_207 = sheet3['C4']
+cell_207.value = unique_value_week_4A4B[0]
+cell_208 = sheet3['D4']
+cell_208.value = unique_value_week_4A4B[1]
+cell_209 = sheet3['E4']
+cell_209.value = unique_value_week_4A4B[2]
+cell_210 = sheet3['F4']
+cell_210.value = unique_value_week_4A4B[3]
+cell_211 = sheet3['G4']
+cell_211.value = unique_value_week_4A4B[4]
+cell_212 = sheet3['H4']
+cell_212.value = unique_value_week_4A4B[5]
 
 workbook.save(DMS)
 print("Hurray ! Program run Successfully")
+
+        
+
+
+
+
+        
+
