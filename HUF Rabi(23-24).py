@@ -248,7 +248,7 @@ for i in list1:
                 total_sum = total_sum*0.4
                 _3B_partner_sum.append(total_sum)
 
-
+  
 
         for x in list2:
             count_PARTNER_season = season_df[(season_df['partner']== x)&(season_df['Is this Crop Card - Programme Plot? ']=='Yes')].shape[0]
