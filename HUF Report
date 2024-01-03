@@ -1,15 +1,14 @@
-
 import openpyxl as xl
 import pandas as pd
 import numpy as np
 from datetime import datetime
 
 
-_3A_path = r'C:/Pratham/python/ExcelAutomation/_3A_.xlsx'
-_3B_path = r'C:/Pratham/python/ExcelAutomation/_3B_.xlsx'
-_3C_path = r'C:/Pratham/python/ExcelAutomation/_3C_.xlsx'
-_4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_.xlsx'
-_4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_.xlsx'
+_3A_path = r'C:/Pratham/python/ExcelAutomation/_3A_rabi.xlsx'
+_3B_path = r'C:/Pratham/python/ExcelAutomation/_3B_rabi.xlsx'
+_3C_path = r'C:/Pratham/python/ExcelAutomation/_3C_rabi.xlsx'
+_4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_rabi.xlsx'
+_4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_rabi.xlsx'
 #Taking dates from user
 start_week_date = input('Enter week start date in DD-MM-YYY format : ')
 end_week_date = input('Enter week end date in DD-MM-YYYY format : ')
@@ -37,7 +36,7 @@ def splitter(count_obj) :
 
 
 
-DMS = r'C:/Pratham/python/ExcelAutomation/HUF_report.xlsx'
+DMS = r'C:/Pratham/python/ExcelAutomation/Rabi 23-24 Demo Plot & DMS user report & Program dashboard template.xlsx'
 workbook = xl.load_workbook(DMS)
 sheet = workbook['2.DMS-UserSummary']
 sheet2 = workbook['3.Program Dashboard']
@@ -46,7 +45,9 @@ sheet3 = workbook['1.DemoPlot-Summary']
 
 
 list1 = [_3A_path,_3B_path,_3C_path,_4A_path,_4B_path]
-list2 = ['CIPT','Srijan','Viksat','Pani','Pradan','SSP']
+list2 = ['CIPT II','Srijan','Viksat','Pani','Pradan','SSP','SIED']
+test_data = ['CIPT IITest','SRIJAN Test','VIKSAT Test','PANI Test','PRADAN Test','SSP Test','SIED Test']
+
 list_season_3A_partner = []
 list_week_3A_partner = []
 list_season_3B_partner = []
@@ -76,6 +77,9 @@ for i in list1:
     if i == _3A_path:
         _3A_list_week = []
         _3A_list_season=[]
+
+        
+        season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
         for x in list2:
             count_df_3A_week = week_df[week_df['partner']== x]
@@ -146,6 +150,8 @@ for i in list1:
         cell_5.value = _3A_list_week[4]
         cell_6 = sheet['H8']
         cell_6.value = _3A_list_week[5]
+        cell_6I = sheet['I8']
+        cell_6I.value = _3A_list_week[6]
 
         cell_7 = sheet['C9']
         cell_7.value = _3A_list_season[0]
@@ -159,6 +165,8 @@ for i in list1:
         cell_11.value = _3A_list_season[4]
         cell_12 = sheet['H9']
         cell_12.value = _3A_list_season[5]
+        cell_12I = sheet['I9']
+        cell_12I.value = _3A_list_season[6]
 
         cell_92 = sheet2['C13']              #3.PROGRAM DASHBOARD
         cell_92.value = _3A_list_season[0]
@@ -172,6 +180,8 @@ for i in list1:
         cell_96.value = _3A_list_season[4]
         cell_97 = sheet2['H13']
         cell_97.value = _3A_list_season[5]
+        cell_97I = sheet2['I13']
+        cell_97I.value = _3A_list_season[6]
 
         print("3A run successfully")
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -183,6 +193,9 @@ for i in list1:
         _3B_list_season_crop =[]
         _3B_partner_sum = []
 
+        
+        season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
+        
         for x in list2:
             count_df_3B_week = week_df[week_df['partner']== x]
             df_3bW = count_df_3B_week[['Surveyor Id']]
@@ -213,7 +226,7 @@ for i in list1:
             _3B_list_season_unique.append(_unique_season_value_PARTNER)
             total_sum = PARTNER_season['In how much area are you adopting new and improved farming practices for this Crop?'].sum()
             
-            if x == 'CIPT':
+            if x == 'CIPT II':
                 total_sum = total_sum*0.4
                 _3B_partner_sum.append(total_sum)
             elif x == 'Srijan':
@@ -231,11 +244,14 @@ for i in list1:
             elif x == 'SSP':
                 total_sum = total_sum*0.4
                 _3B_partner_sum.append(total_sum)
+            elif x == 'SIED':
+                total_sum = total_sum*0.4
+                _3B_partner_sum.append(total_sum)
 
 
 
         for x in list2:
-            count_PARTNER_season = season_df[(season_df['partner']== x)&(season_df['Is this Crop Card - Programme Plot?']=='Yes')].shape[0]
+            count_PARTNER_season = season_df[(season_df['partner']== x)&(season_df['Is this Crop Card - Programme Plot? ']=='Yes')].shape[0]
             _3B_list_season_crop.append(count_PARTNER_season)
 
         
@@ -252,6 +268,8 @@ for i in list1:
         cell_17.value = _3B_list_week_unique[4]
         cell_18 = sheet['H12']
         cell_18.value = _3B_list_week_unique[5]
+        cell_18I = sheet['I12']
+        cell_18I.value = _3B_list_week_unique[6]
 
         #data filling for unique season values
 
@@ -267,6 +285,9 @@ for i in list1:
         cell_23.value = _3B_list_season_unique[4]
         cell_24 = sheet['H13']
         cell_24.value = _3B_list_season_unique[5]
+        cell_24I = sheet['I13']
+        cell_24I.value = _3B_list_season_unique[6]
+
         
         #data filling for week values
         
@@ -282,6 +303,8 @@ for i in list1:
         cell_29.value = _3B_list_week[4]
         cell_30 = sheet['H14']
         cell_30.value = _3B_list_week[5]
+        cell_30I = sheet['I14']
+        cell_30I.value = _3B_list_week[6]
         
         #data filling for season value
 
@@ -297,6 +320,9 @@ for i in list1:
         cell_35.value = _3B_list_season[4]
         cell_36 = sheet['H15']
         cell_36.value = _3B_list_season[5]
+        cell_36I = sheet['I15']
+        cell_36I.value = _3B_list_season[6]
+
 
         #data filling for season crop - Yes
         cell_37 = sheet['C16']
@@ -311,6 +337,9 @@ for i in list1:
         cell_41.value = _3B_list_season_crop[4]
         cell_42 = sheet['H16']
         cell_42.value = _3B_list_season_crop[5]
+        cell_42I = sheet['I16']
+        cell_42I.value = _3B_list_season_crop[6]
+
 
         cell_98 = sheet2['C18']               #3.PROGRAM DASHBOARD
         cell_98.value = _3B_list_season_unique[0]
@@ -324,6 +353,9 @@ for i in list1:
         cell_102.value = _3B_list_season_unique[4]
         cell_103 = sheet2['H18']
         cell_103.value = _3B_list_season_unique[5]
+        cell_103I = sheet2['I18']
+        cell_103I.value = _3B_list_season_unique[6]
+
 
         cell_104 = sheet2['C20']                 #3.PROGRAM DASHBOARD
         cell_104.value = _3B_list_season[0]
@@ -337,6 +369,9 @@ for i in list1:
         cell_108.value = _3B_list_season[4]
         cell_109 = sheet2['H20']
         cell_109.value = _3B_list_season[5]
+        cell_109I = sheet2['I20']
+        cell_109I.value = _3B_list_season[6]
+
 
         cell_110 = sheet2['C21']                 #3.PROGRAM DASHBOARD
         cell_110.value = _3B_partner_sum[0]
@@ -350,6 +385,10 @@ for i in list1:
         cell_114.value = _3B_partner_sum[4]
         cell_115 = sheet2['H21']
         cell_115.value = _3B_partner_sum[5]
+        cell_115I = sheet2['I21']
+        cell_115I.value = _3B_partner_sum[6]
+
+
 
         print("3B run successfully")
 
@@ -362,6 +401,9 @@ for i in list1:
         _3C_CT_season = []
         _3C_unique_PT = []
         _3C_unique_CT = []
+
+        
+        season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
         for x in list2:
             count_df_3C_week = week_df[week_df['partner']== x]
@@ -377,11 +419,11 @@ for i in list1:
             _3C_week.append(count_PARTNER_week)
 
         for x in list2:
-            count_PARTNER_week_PT = week_df[(week_df['partner']== x)&(week_df['Select Plot Category']=='Programme Plot')].shape[0]
+            count_PARTNER_week_PT = week_df[(week_df['partner']== x)&(week_df['Select Plot Category   ']=='Programme Plot')].shape[0]
             _3C_PT_week.append(count_PARTNER_week_PT)
 
         for x in list2:
-            count_PARTNER_week_CT = week_df[(week_df['partner']== x)&(week_df['Select Plot Category']=='Control Plot')].shape[0]
+            count_PARTNER_week_CT = week_df[(week_df['partner']== x)&(week_df['Select Plot Category   ']=='Control Plot')].shape[0]
             _3C_CT_week.append(count_PARTNER_week_CT)
 
         for x in list2:
@@ -389,20 +431,20 @@ for i in list1:
             _3C_season.append(count_PARTNER_season)
 
         for x in list2:
-            count_PARTNER_season_PT = season_df[(season_df['partner']== x)&(season_df['Select Plot Category']=='Programme Plot')].shape[0]
+            count_PARTNER_season_PT = season_df[(season_df['partner']== x)&(season_df['Select Plot Category   ']=='Programme Plot')].shape[0]
             _3C_PT_season.append(count_PARTNER_season_PT)
 
             #3.PROGRAM DASHBOARD
-            df_PT_ = season_df[(season_df['partner']== x)&(season_df['Select Plot Category']=='Programme Plot')]
+            df_PT_ = season_df[(season_df['partner']== x)&(season_df['Select Plot Category   ']=='Programme Plot')]
             count_df_PT = df_PT_['Programme Farmer Unique ID'].nunique()
             _3C_unique_PT.append(count_df_PT)
         for x in list2:
-            count_PARTNER_season_CT = season_df[(season_df['partner']== x)&(season_df['Select Plot Category']=='Control Plot')].shape[0]
+            count_PARTNER_season_CT = season_df[(season_df['partner']== x)&(season_df['Select Plot Category   ']=='Control Plot')].shape[0]
             _3C_CT_season.append(count_PARTNER_season_CT)
 
             #3.PROGRAM DASHBOARD
-            df_CT_ = season_df[(season_df['partner']== x)&(season_df['Select Plot Category']=='Control Plot')]
-            count_df_CT = df_CT_['Programme Farmer Unique ID'].nunique()
+            df_CT_ = season_df[(season_df['partner']== x)&(season_df['Select Plot Category   ']=='Control Plot')]
+            count_df_CT = df_CT_['Control Farmer Unique ID'].nunique()
             _3C_unique_CT.append(count_df_CT)
 
         #data filling in week  
@@ -418,6 +460,8 @@ for i in list1:
         cell_47.value = _3C_week[4]
         cell_48 = sheet['H22']
         cell_48.value = _3C_week[5]
+        cell_48I = sheet['I22']
+        cell_48I.value = _3C_week[6]
 
         #data filling in PT week
         cell_49 = sheet['C23']
@@ -432,6 +476,8 @@ for i in list1:
         cell_53.value = _3C_PT_week[4]
         cell_54 = sheet['H23']
         cell_54.value = _3C_PT_week[5]
+        cell_54I = sheet['I23']
+        cell_54I.value = _3C_PT_week[6]
 
         #data filing in CT week
         cell_55 = sheet['C24']
@@ -446,6 +492,8 @@ for i in list1:
         cell_59.value = _3C_CT_week[4]
         cell_60 = sheet['H24']
         cell_60.value = _3C_CT_week[5]
+        cell_60I = sheet['I24']
+        cell_60I.value = _3C_CT_week[6]
 
         #data filling in season 
         cell_61 = sheet['C25']
@@ -460,6 +508,8 @@ for i in list1:
         cell_65.value = _3C_season[4]
         cell_66 = sheet['H25']
         cell_66.value = _3C_season[5]
+        cell_66I = sheet['I25']
+        cell_66I.value = _3C_season[6]
 
         #data filling in PT season
         cell_67 = sheet['C26']
@@ -474,6 +524,8 @@ for i in list1:
         cell_71.value = _3C_PT_season[4]
         cell_72 = sheet['H26']
         cell_72.value = _3C_PT_season[5]
+        cell_72I = sheet['I26']
+        cell_72I.value = _3C_PT_season[6]
 
         #data filing in CT Season
         cell_73 = sheet['C28']
@@ -488,6 +540,9 @@ for i in list1:
         cell_78.value = _3C_CT_season[4]
         cell_79 = sheet['H28']
         cell_79.value = _3C_CT_season[5]
+        cell_79I = sheet['I28']
+        cell_79I.value = _3C_CT_season[6]
+
 
         cell_116 = sheet2['C26']             #3.PROGRAM DASHBOARD
         cell_116.value = _3C_PT_season[0]
@@ -501,6 +556,8 @@ for i in list1:
         cell_120.value = _3C_PT_season[4]
         cell_121 = sheet2['H26']
         cell_121.value = _3C_PT_season[5]
+        cell_121I = sheet2['I26']
+        cell_121I.value = _3C_PT_season[6]
 
         #data filing in CT Season            #3.PROGRAM DASHBOARD
         cell_122 = sheet2['C28']
@@ -515,6 +572,9 @@ for i in list1:
         cell_126.value = _3C_CT_season[4]
         cell_127 = sheet2['H28']
         cell_127.value = _3C_CT_season[5]
+        cell_127I = sheet2['I28']
+        cell_127I.value = _3C_CT_season[6]
+
 
         cell_128 = sheet2['C25']             #3.PROGRAM DASHBOARD
         cell_128.value = _3C_unique_PT[0]
@@ -528,6 +588,8 @@ for i in list1:
         cell_132.value = _3C_unique_PT[4]
         cell_133 = sheet2['H25']
         cell_133.value = _3C_unique_PT[5]
+        cell_133I = sheet2['I25']
+        cell_133I.value = _3C_unique_PT[6]
 
         cell_134 = sheet2['C27']             #3.PROGRAM DASHBOARD
         cell_134.value = _3C_unique_CT[0]
@@ -541,6 +603,9 @@ for i in list1:
         cell_138.value = _3C_unique_CT[4]
         cell_139 = sheet2['H27']
         cell_139.value = _3C_unique_CT[5]
+        cell_139I = sheet2['I27']
+        cell_139I.value = _3C_unique_CT[6]
+
         print("3C run successfully")
 
     elif i == _4A_path:
@@ -549,6 +614,8 @@ for i in list1:
         list_week_4A_partner = []
         list_4A_sum = []
 
+        
+        season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
 
         for x in list2:
@@ -625,6 +692,8 @@ for i in list1:
         cell_145.value = _4A_unique_season[4]
         cell_146 = sheet3['H7']
         cell_146.value = _4A_unique_season[5]
+        cell_146I = sheet3['I7']
+        cell_146I.value = _4A_unique_season[6]
 
         cell_147 = sheet3['C10']             
         cell_147.value = _4A_season[0]
@@ -638,6 +707,9 @@ for i in list1:
         cell_151.value = _4A_season[4]
         cell_152 = sheet3['H10']
         cell_152.value = _4A_season[5]
+        cell_152I = sheet3['I10']
+        cell_152I.value = _4A_season[6]
+
 
         cell_153 = sheet3['C12']             
         cell_153.value = list_4A_sum[0]
@@ -651,6 +723,9 @@ for i in list1:
         cell_157.value = list_4A_sum[4]
         cell_158 = sheet3['H12']
         cell_158.value = list_4A_sum[5]
+        cell_158I = sheet3['I12']
+        cell_158I.value = list_4A_sum[6]
+
 
         print("4A run successfully")
         
@@ -666,7 +741,8 @@ for i in list1:
         list_4B_sum_season =[]
         list_week_4B_partner=[]
 
-
+        
+        season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
         for x in list2:
             count_PARTNER_season_4B = season_df[season_df['partner']== x].shape[0]
@@ -674,7 +750,7 @@ for i in list1:
         
         for x in list2:
             PARTNER_season_4B_unique = season_df[season_df['partner']== x]
-            _unique_season_value_PARTNER = PARTNER_season_4B_unique['Select Demo Plot for tracking'].nunique()
+            _unique_season_value_PARTNER = PARTNER_season_4B_unique['Select Demo Plot for tracking '].nunique()
             _4B_unique_season.append(_unique_season_value_PARTNER)
 
         for x in list2:
@@ -683,7 +759,7 @@ for i in list1:
         
         for x in list2:
             PARTNER_week_4B_unique = week_df[week_df['partner']== x]
-            _unique_week_value_PARTNER = PARTNER_week_4B_unique['Select Demo Plot for tracking'].nunique()
+            _unique_week_value_PARTNER = PARTNER_week_4B_unique['Select Demo Plot for tracking '].nunique()
             _4B_unique_week.append(_unique_week_value_PARTNER)
 
         for x in list2:
@@ -807,6 +883,9 @@ for i in list1:
         cell_163.value = _4B_unique_week[4]
         cell_164 = sheet3['H14']
         cell_164.value = _4B_unique_week[5]
+        cell_164I = sheet3['I14']
+        cell_164I.value = _4B_unique_week[6]
+
 
         cell_165 = sheet3['C15']             
         cell_165.value = _4B_week[0]
@@ -820,6 +899,9 @@ for i in list1:
         cell_169.value = _4B_week[4]
         cell_170 = sheet3['H15']
         cell_170.value = _4B_week[5]
+        cell_170I = sheet3['I15']
+        cell_170I.value = _4B_week[6]
+
 
         cell_171 = sheet3['C16']             
         cell_171.value = list_4B_sum_week[0]
@@ -833,6 +915,9 @@ for i in list1:
         cell_175.value = list_4B_sum_week[4]
         cell_176 = sheet3['H16']
         cell_176.value = list_4B_sum_week[5]
+        cell_176I = sheet3['I16']
+        cell_176I.value = list_4B_sum_week[6]
+
 
         cell_177 = sheet3['C17']             
         cell_177.value = _4B_farmerSUM_week[0]
@@ -846,6 +931,9 @@ for i in list1:
         cell_181.value = _4B_farmerSUM_week[4]
         cell_182 = sheet3['H17']
         cell_182.value = _4B_farmerSUM_week[5]
+        cell_182I = sheet3['I17']
+        cell_182I.value = _4B_farmerSUM_week[6]
+
 
         cell_183 = sheet3['C18']             
         cell_183.value = _4B_unique_season[0]
@@ -859,6 +947,9 @@ for i in list1:
         cell_187.value = _4B_unique_season[4]
         cell_188 = sheet3['H18']
         cell_188.value = _4B_unique_season[5]
+        cell_188I = sheet3['I18']
+        cell_188I.value = _4B_unique_season[6]
+
 
         cell_189 = sheet3['C19']             
         cell_189.value = _4B_season[0]
@@ -872,6 +963,10 @@ for i in list1:
         cell_193.value = _4B_season[4]
         cell_194 = sheet3['H19']
         cell_194.value = _4B_season[5]
+        cell_194I = sheet3['I19']
+        cell_194I.value = _4B_season[6]
+
+
 
         cell_195 = sheet3['C20']             
         cell_195.value = list_4B_sum_season[0]
@@ -885,6 +980,11 @@ for i in list1:
         cell_199.value = list_4B_sum_season[4]
         cell_200 = sheet3['H20']
         cell_200.value = list_4B_sum_season[5]
+        cell_200I = sheet3['I20']
+        cell_200I.value = list_4B_sum_season[6]
+
+
+
 
         cell_201 = sheet3['C22']             
         cell_201.value = _4B_farmerSUM_season[0]
@@ -898,24 +998,26 @@ for i in list1:
         cell_205.value = _4B_farmerSUM_season[4]
         cell_206 = sheet3['H22']
         cell_206.value = _4B_farmerSUM_season[5]
+        cell_206I = sheet3['I22']
+        cell_206I.value = _4B_farmerSUM_season[6]
 
         print("4B run successfully")
 
 unique_value_week_3A3B3C = []
 unique_value_season_3A3B3C = []
 unique_value_week_4A4B = [] 
-for i in range(0,6):
+for i in range(0,7):
     df_week_C3A3B3C = pd.concat([list_week_3A_partner[i],list_week_3B_partner[i],list_week_3C_partner[i]])
     a = df_week_C3A3B3C['Surveyor Id'].nunique()
     unique_value_week_3A3B3C.append(a)
 
-for i in range(0,6):
+for i in range(0,7):
     df_season_C = pd.concat([list_season_3A_partner[i],list_season_3B_partner[i],list_season_3C_partner[i]])
     a = df_season_C['Surveyor Id'].nunique()
     unique_value_season_3A3B3C.append(a)
 
-  
-for i in range(0,6):
+
+for i in range(0,7):
     df_week_C4A4B = pd.concat([list_week_4A_partner[i],list_week_4B_partner[i]])
     a = df_week_C4A4B['Surveyor Id'].nunique()
     unique_value_week_4A4B.append(a)
@@ -936,6 +1038,8 @@ cell_84 = sheet['G4']
 cell_84.value = unique_value_week_3A3B3C[4]
 cell_85 = sheet['H4']
 cell_85.value = unique_value_week_3A3B3C[5]
+cell_85I = sheet['I4']
+cell_85I.value = unique_value_week_3A3B3C[6]
 
 cell_86 = sheet['C6']
 cell_86.value = unique_value_season_3A3B3C[0]
@@ -949,6 +1053,9 @@ cell_90 = sheet['G6']
 cell_90.value = unique_value_season_3A3B3C[4]
 cell_91 = sheet['H6']
 cell_91.value = unique_value_season_3A3B3C[5]
+cell_91I = sheet['I6']
+cell_91I.value = unique_value_season_3A3B3C[6]
+
 
 cell_207 = sheet3['C4']
 cell_207.value = unique_value_week_4A4B[0]
@@ -962,14 +1069,9 @@ cell_211 = sheet3['G4']
 cell_211.value = unique_value_week_4A4B[4]
 cell_212 = sheet3['H4']
 cell_212.value = unique_value_week_4A4B[5]
+cell_212I = sheet3['I4']
+cell_212I.value = unique_value_week_4A4B[6]
+
 
 workbook.save(DMS)
 print("Hurray ! Program run Successfully")
-
-        
-
-
-
-
-        
-
