@@ -4,22 +4,20 @@ import numpy as np
 from datetime import datetime
 
 
-_3A_path = r'C:/Pratham/python/ExcelAutomation/_3A_rabi.xlsx'
-_3B_path = r'C:/Pratham/python/ExcelAutomation/_3B_rabi.xlsx'
-_3C_path = r'C:/Pratham/python/ExcelAutomation/_3C_rabi.xlsx'
-_4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_rabi.xlsx'
-_4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_rabi.xlsx'
+_3A_path = r'C:/Pratham/python/ExcelAutomation/_3A_kharif.xlsx'
+_3B_path = r'C:/Pratham/python/ExcelAutomation/_3B_kharif.xlsx'
+_3C_path = r'C:/Pratham/python/ExcelAutomation/_3C_kharif.xlsx'
+_4A_path = r'C:/Pratham/python/ExcelAutomation/_4A_kharif.xlsx'
+_4B_path = r'C:/Pratham/python/ExcelAutomation/_4B_kharif.xlsx'
 #Taking dates from user
 start_week_date = input('Enter week start date in DD-MM-YYY format : ')
 end_week_date = input('Enter week end date in DD-MM-YYYY format : ')
 start_season_date = input('Enter season start date in DD-MM-YYYY format : ')
 
-
-DMS = r'C:/Pratham/python/ExcelAutomation/Rabi 23-24 Demo Plot & DMS user report & Program dashboard template.xlsx'
+DMS = r'C:/Pratham/python/ExcelAutomation/151123_Kharif 23-24 Demo Plot & DMS user report & Program dashboard (1).xlsx'
 sheet ='2.DMS-UserSummary'
 sheet2 ='3.Program Dashboard'
 sheet3 ='1.DemoPlot-Summary'
-
 
 def fill_excel_after_string(string, values_list, excel_file,sheet_name):
     # Load the Excel workbook
@@ -45,7 +43,8 @@ def fill_excel_after_string(string, values_list, excel_file,sheet_name):
 
     print(f"String '{string}' not found in sheet of the Excel file.")
 
-#StartProgram
+
+
 def convert_date(date_obj):
     date_str=str(date_obj)
     try:
@@ -69,10 +68,9 @@ def splitter(count_obj) :
 
 
 
-
 list1 = [_3A_path,_3B_path,_3C_path,_4A_path,_4B_path]
-list2 = ['CIPT II','Srijan','Viksat','Pani','Pradan','SSP','SIED']
-test_data = ['CIPT IITest','SRIJAN Test','VIKSAT Test','PANI Test','PRADAN Test','SSP Test','SIED Test']
+list2 = ['CIPT','Srijan','Viksat','Pani','Pradan','SSP','SIED']
+test_data = ['CIPT Test','SRIJAN Test','VIKSAT Test','PANI Test','PRADAN Test','SSP Test','SIED Test']
 
 list_season_3A_partner = []
 list_week_3A_partner = []
@@ -104,7 +102,6 @@ for i in list1:
         _3A_list_week = []
         _3A_list_season=[]
 
-        
         season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
         for x in list2:
@@ -126,8 +123,11 @@ for i in list1:
         
         #filling values in sheet
         fill_excel_after_string("No. of 3A forms added in the reporting week",_3A_list_week,DMS,sheet)
-        fill_excel_after_string("No. of 3A forms added in current season (26th November 2023)",_3A_list_season,DMS,sheet)
+        fill_excel_after_string("No. of 3A forms added in current season (19th June 2023)",_3A_list_season,DMS,sheet)
         fill_excel_after_string("No. of Programme farmers added in current season",_3A_list_season,DMS,sheet2)
+        
+
+        
 
         print("3A run successfully")
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -138,10 +138,9 @@ for i in list1:
         _3B_list_season_unique=[]
         _3B_list_season_crop =[]
         _3B_partner_sum = []
-
         
         season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
-        
+
         for x in list2:
             count_df_3B_week = week_df[week_df['partner']== x]
             df_3bW = count_df_3B_week[['Surveyor Id']]
@@ -172,7 +171,7 @@ for i in list1:
             _3B_list_season_unique.append(_unique_season_value_PARTNER)
             total_sum = PARTNER_season['In how much area are you adopting new and improved farming practices for this Crop?'].sum()
             
-            if x == 'CIPT II':
+            if x == 'CIPT':
                 total_sum = total_sum*0.4
                 _3B_partner_sum.append(total_sum)
             elif x == 'Srijan':
@@ -194,7 +193,7 @@ for i in list1:
                 total_sum = total_sum*0.4
                 _3B_partner_sum.append(total_sum)
 
-  
+
 
         for x in list2:
             count_PARTNER_season = season_df[(season_df['partner']== x)&(season_df['Is this Crop Card - Programme Plot? ']=='Yes')].shape[0]
@@ -221,8 +220,6 @@ for i in list1:
         fill_excel_after_string("# No. of Programme Plots",_3B_list_season,DMS,sheet2)
         fill_excel_after_string("Area adopted under improved practices (Programme Coverage)",_3B_partner_sum,DMS,sheet2)
 
-
-
         print("3B run successfully")
 
     elif i == _3C_path:
@@ -235,7 +232,6 @@ for i in list1:
         _3C_unique_PT = []
         _3C_unique_CT = []
 
-        
         season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
 
         for x in list2:
@@ -303,7 +299,6 @@ for i in list1:
         fill_excel_after_string("# No. of Control Plots Crop Card Farmer",_3C_CT_season,DMS,sheet2)
         fill_excel_after_string("# No. of Program Plot Crop card Farmers",_3C_unique_PT,DMS,sheet2)
         fill_excel_after_string("# No. of Control Plot Crop Card Farmers",_3C_unique_CT,DMS,sheet2)
-
         print("3C run successfully")
 
     elif i == _4A_path:
@@ -312,8 +307,8 @@ for i in list1:
         list_week_4A_partner = []
         list_4A_sum = []
 
-        
         season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
+
 
 
         for x in list2:
@@ -394,9 +389,9 @@ for i in list1:
         list_4B_sum_week =[]
         list_4B_sum_season =[]
         list_week_4B_partner=[]
-
         
         season_df = season_df.drop(season_df[season_df['Surveyor Name'].isin(test_data)].index)
+
 
         for x in list2:
             count_PARTNER_season_4B = season_df[season_df['partner']== x].shape[0]
@@ -556,8 +551,8 @@ for i in range(0,7):
     unique_value_week_4A4B.append(a)
 
 
-
 fill_excel_after_string("# of Active CRPs/Users IDs in reporting week ",unique_value_week_3A3B3C,DMS,sheet)
 fill_excel_after_string("# of Active CRPs/Users IDs in Current Season",unique_value_season_3A3B3C,DMS,sheet)
 fill_excel_after_string("# of Active CRPs/Users IDs in reporting week ",unique_value_week_4A4B,DMS,sheet3)
+
 print("Hurray ! Program run Successfully")
