@@ -22,24 +22,15 @@ sheet3 ='1.DemoPlot-Summary'
 
 
 def fill_excel_after_string(string, values_list, excel_file,sheet_name):
-    # Load the Excel workbook
     wb = xl.load_workbook(excel_file)
-    # Select the specific sheet (sheet2)
     sheet = wb[sheet_name]
-
-    # Search for the cell containing the given string
     for row in sheet.iter_rows():
         for cell in row:
             if cell.value == string:
-                # Get the row and column indexes of the cell containing the string
                 row_index = cell.row
                 col_index = cell.column
-
-                # Write values from the list just after the cell containing the string
                 for i, value in enumerate(values_list):
                     sheet.cell(row=row_index, column=col_index+i+1, value=value)
-
-                # Save the changes to the Excel file
                 wb.save(excel_file)
                 return
 
