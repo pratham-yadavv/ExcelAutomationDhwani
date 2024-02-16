@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 from io import StringIO
 
-
 #Taking dates from user
 start_week_date = input('Enter week start date in DD-MM-YYY format : ')
 end_week_date = input('Enter week end date in DD-MM-YYYY format : ')
